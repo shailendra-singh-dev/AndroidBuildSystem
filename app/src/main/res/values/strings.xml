@@ -1,0 +1,4 @@
+<resources>
+    <string name="action_settings">Settings</string>
+    <string name="activity_title_launcher">Main Activity</string>
+</resources>

@@ -1,0 +1,89 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    def appNameRelease = "BuildSystem-Release"+ gitSha() + '-' + buildTime()
+    def appNameDebug = "BuildSystem-Debug"  + gitSha() + '-' + buildTime()
+    def launcherIconRelease = "@drawable/ic_launcher"
+    def launcherIconDebug = "@drawable/ic_launcher_debug"
+
+    //Default Configurations
+    defaultConfig {
+        applicationId "com.shail.buildsystem"
+        minSdkVersion 15
+        targetSdkVersion 23
+    }
+    //Compile options..
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    //Product Flavours..
+    productFlavors {
+        demo {
+            applicationId = "com.shail.buildsystem.demo"
+            versionCode 1000
+            versionName "1.0-full"
+        }
+        full {
+            applicationId = "com.shail.buildsystem.full"
+            versionCode 2000
+            versionName "1.0-free"
+        }
+    }
+
+    buildTypes {
+        debug{
+            resValue "string", "app_name", appNameDebug
+            debuggable true
+            //Application Id suffix..
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            resValue "string", "app_name", appNameRelease
+            debuggable false
+            //Application Id suffix..
+            applicationIdSuffix ".release"
+            versionNameSuffix '-RELEASE'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //Replacing App icon based on build-type..
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.processManifest.doLast {
+                if (variant.buildType.isDebuggable()) {
+                    def manifestOutFile = output.processManifest.manifestOutputFile
+                    def newFileContents = manifestOutFile.getText('UTF-8').replace(launcherIconRelease, launcherIconDebug)
+                    manifestOutFile.write(newFileContents, 'UTF-8')
+                }
+            }
+        }
+    }
+}
+def buildTime() {
+    DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
+    return df.format(new Date())
+}
+
+def gitSha() {
+    return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+}
