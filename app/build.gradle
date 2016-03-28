@@ -29,12 +29,12 @@ android {
         demo {
             applicationId = "com.shail.buildsystem.demo"
             versionCode 1000
-            versionName "1.0-full"
+            versionName "1.0-demo"
         }
         full {
             applicationId = "com.shail.buildsystem.full"
             versionCode 2000
-            versionName "1.0-free"
+            versionName "1.0-full"
         }
     }
 
@@ -59,12 +59,13 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
+            shrinkResources true
             resValue "string", "app_name", appNameRelease
             debuggable false
             //Application Id suffix..
             applicationIdSuffix ".release"
             versionNameSuffix '-RELEASE'
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
