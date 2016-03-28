@@ -38,6 +38,15 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('../key/build-system-keystore.jks')
+            storePassword "buildsystem"
+            keyAlias "build-system-keystore-alias"
+            keyPassword "buildsystem"
+        }
+    }
+
     buildTypes {
         debug{
             resValue "string", "app_name", appNameDebug
@@ -47,6 +56,7 @@ android {
             versionNameSuffix '-DEBUG'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
         release {
             resValue "string", "app_name", appNameRelease
@@ -56,6 +66,7 @@ android {
             versionNameSuffix '-RELEASE'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 

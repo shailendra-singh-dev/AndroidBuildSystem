@@ -23,7 +23,8 @@ public class SecondActivity extends AppCompatActivity {
         final TextView button= (TextView)findViewById(R.id.textview);
         final String versionName =BuildConfig.VERSION_NAME;
         final int versionCode =BuildConfig.VERSION_CODE;
-        button.setText("versionName;" + versionName + ",versionCode:" + versionCode);
+        button.setText("App Info:"+getString(R.string.app_name)+"," +
+                "versionName;" + versionName + ",versionCode:" + versionCode);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
